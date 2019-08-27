@@ -28,6 +28,7 @@
 
 #include <Eigen/Core>
 #include <memory>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -302,7 +303,19 @@ public:
     Eigen::Vector4d GetTrianglePlane(size_t triangle_idx) const;
 
     /// Function that computes the convex hull of the triangle mesh using qhull
-    std::shared_ptr<TriangleMesh> ComputeConvexHull() const;
+    std::tuple<std::shared_ptr<TriangleMesh>, std::vector<size_t>>
+    ComputeConvexHull() const;
+
+    /// This is an implementation of the Hidden Point Removal operator
+    /// described in Katz et. al. 'Direct Visibility of Point Sets', 2007.
+    /// \param camera_location is the view point that is used to remove
+    /// invisible points. \param radius defines the radius of the spherical
+    /// projection. Additional information about the choice of \param radius
+    /// for noisy point clouds can be found in Mehra et. al. 'Visibility of
+    /// Noisy Point Cloud Data', 2010.
+    std::tuple<std::shared_ptr<TriangleMesh>, std::vector<size_t>>
+    HiddenPointRemoval(const Eigen::Vector3d &camera_location,
+                       const double radius) const;
 
     /// Function to sample \param number_of_points points uniformly from the
     /// mesh

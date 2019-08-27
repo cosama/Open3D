@@ -256,6 +256,12 @@ void pybind_trianglemesh(py::module &m) {
             .def("compute_convex_hull",
                  &geometry::TriangleMesh::ComputeConvexHull,
                  "Computes the convex hull of the triangle mesh.")
+            .def("hidden_point_removal",
+                 &geometry::TriangleMesh::HiddenPointRemoval,
+                 "Remove hidden points from a point cloud and return a mesh of "
+                 "the remaining points. Based on Katz et al. 'Direct "
+                 "Visibility of Point Sets', 2007.",
+                 "camera_location"_a, "radius"_a)
             .def_static(
                     "create_from_point_cloud_ball_pivoting",
                     &geometry::TriangleMesh::CreateFromPointCloudBallPivoting,
@@ -491,6 +497,12 @@ void pybind_trianglemesh(py::module &m) {
               "The number of triangles that the simplified mesh should have. "
               "It is not guranteed that this number will be reached."}});
     docstring::ClassMethodDocInject(m, "TriangleMesh", "compute_convex_hull");
+    docstring::ClassMethodDocInject(
+            m, "TriangleMesh", "hidden_point_removal",
+            {{"input", "The input point cloud."},
+             {"camera_location",
+              "All points not visible from that location will be reomved"},
+             {"radius", "The radius of the sperical projection"}});
     docstring::ClassMethodDocInject(
             m, "TriangleMesh", "create_from_point_cloud_ball_pivoting",
             {{"pcd",

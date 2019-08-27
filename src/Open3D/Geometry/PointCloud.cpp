@@ -288,15 +288,15 @@ std::vector<double> PointCloud::ComputeNearestNeighborDistance() const {
     return nn_dis;
 }
 
-std::shared_ptr<TriangleMesh> PointCloud::ComputeConvexHull(
-        std::vector<int> &pt_map) const {
-    return Qhull::ComputeConvexHull(points_, pt_map);
+std::tuple<std::shared_ptr<TriangleMesh>, std::vector<size_t>>
+PointCloud::ComputeConvexHull() const {
+    return Qhull::ComputeConvexHull(points_);
 }
 
-std::shared_ptr<TriangleMesh> PointCloud::HiddenPointRemoval(
-        Eigen::Vector3d camera, double radius,
-        std::vector<int> &pt_map) const {
-    return Qhull::HiddenPointRemoval(points_, camera, radius, pt_map);
+std::tuple<std::shared_ptr<TriangleMesh>, std::vector<size_t>>
+PointCloud::HiddenPointRemoval(const Eigen::Vector3d &camera_location,
+                               const double radius) const {
+    return Qhull::HiddenPointRemoval(points_, camera_location, radius);
 }
 
 }  // namespace geometry
